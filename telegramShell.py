@@ -67,7 +67,7 @@ class telegramShell():
             if self.servername != '':
                 self.help_text=self.servername+'\n'
             for i in range(len(self.names)):
-                self.addCmd2(self.names[i],self.infos[i],self.commands[i])
+                self.addCmd(self.names[i],self.infos[i],self.commands[i])
                 self.help_text=self.help_text+'/'+self.names[i]+' - '+self.infos[i]+'\n'
             self.help_text=self.help_text+'[shell] - Simply type shell commands\n/menu - Show menu\n/help - Command-List'
             echo_handler = MessageHandler(Filters.text,self.shellMessageHandler)
@@ -113,39 +113,15 @@ class telegramShell():
         end=line.find("'",start)
         print(line[start:end])
         return line[start:end]
-
+			
     def addCmd(self, name, info, command):  # Create CommandHandler and add to dispatcher
         def cmd(bot, update):
                 bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.TYPING)
-                systeminfo=self.exec_command(command)
-                if systeminfo:
-                    if systeminfo!="":
-                        self.send_long_message(bot, update, systeminfo)
-                    else:
-                        bot.send_message(chat_id=update.message.chat_id, text='Empty command')
-                else:
-                    bot.send_message(chat_id=update.message.chat_id, text='Error in command')
+                self.exec_command(bot, update, command)
         handler = CommandHandler(name,cmd)
         self.dispatcher.add_handler(handler)
 
-    def exec_command(self, cmd_str): # Execute Shell-Command
-            systeminfo=''
-            with tempfile.TemporaryFile() as tempf:
-                    proc = subprocess.Popen(cmd_str,stdout=tempf, shell=True)
-                    proc.wait()
-                    tempf.seek(0)
-                    systeminfo=systeminfo+tempf.read().decode('utf-8')
-            print('CMD: '+cmd_str+'\nANSWER: \n'+systeminfo+'\n')
-            return systeminfo
-			
-    def addCmd2(self, name, info, command):  # Create CommandHandler and add to dispatcher
-        def cmd(bot, update):
-                bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.TYPING)
-                self.exec_command2(bot, update, command)
-        handler = CommandHandler(name,cmd)
-        self.dispatcher.add_handler(handler)
-
-    def exec_command2(self, bot, update, cmd_str):
+    def exec_command(self, bot, update, cmd_str):
         print('CMD: '+cmd_str)
         cmd = subprocess.Popen(cmd_str, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         #for line in cmd.stdout.readline():
@@ -163,12 +139,6 @@ class telegramShell():
                 #self.send_long_message(bot, update, 'shell:'+path+'$')
                 self.sender.addMessage(bot, update, 'shell:'+path+'$')
                 break
-	
-    def send_long_message(self, bot, update, message_text='Empty message'):
-        restlength=len(message_text)
-        while restlength>0:
-            bot.send_message(chat_id=update.message.chat_id, text=message_text)
-            restlength=restlength-4096
 
 #################### Action Handler #################################################
 
@@ -176,14 +146,21 @@ class telegramShell():
     def shellMessageHandler(self,bot, update):
             cmd_string=update.message.text
             if cmd_string and cmd_string!="":
-                if cmd_string.find('cd ')==0:
+                if cmd_string.lower().find('cd ')==0:
                     try:
                         os.chdir(cmd_string[3:])
+                        path=subprocess.Popen('pwd -P', shell=True, stdout=subprocess.PIPE)
+                        path=path.stdout.readline().decode('utf-8')
+                        path = path.replace('\r', '').replace('\n', '')
+                        self.sender.addMessage(bot, update, 'shell:'+path+'$')
                     except:
-                        self.send_long_message(bot, update, 'No such directory')
+                        self.sender.addMessage(bot, update, 'No such directory')
+                        path=subprocess.Popen('pwd -P', shell=True, stdout=subprocess.PIPE)
+                        path=path.stdout.readline().decode('utf-8')
+                        path = path.replace('\r', '').replace('\n', '')
+                        self.sender.addMessage(bot, update, 'shell:'+path+'$')
                 elif self.checkBlacklist(cmd_string)==True:
-                    #self.send_long_message(bot, update, self.exec_command2(first_lower(cmd_string)))
-                    self.exec_command2(bot, update, first_lower(cmd_string))
+                    self.exec_command(bot, update, first_lower(cmd_string))
                 else:
                     bot.send_message(chat_id=update.message.chat_id, text='Command blacklisted!')
             else:
