@@ -14,7 +14,7 @@ No need for dynamicDNS and portforwarding!
 - Chat with BotFather to create a Bot ( [https://telegram.me/botfather](https://telegram.me/botfather) ), just launch the command /newbot to get your Telegram Token.  
 Open the bot chat and send some messages to activate the bot.
 - Clone this repository
-  > cd ~ & git clone https://git.kellerbase.de/haschtl/telegramRemoteShell.git & cd telegramRemoteShell
+  > cd ~ & git clone https://github.com/Haschtl/telegramRemoteShell.git & cd telegramRemoteShell
 
 - Enter the Bot-Token from Botfather in 'config.ini' file.
 
