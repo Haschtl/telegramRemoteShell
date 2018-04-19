@@ -2,6 +2,13 @@
 A configurable Remote-shell in telegram for Linux and Windows.  
 No need for dynamicDNS and portforwarding!
 
+# Features
+- Compatible with Linux and Windows!
+- Use most Shell-commands remotly in telegram.
+- Only interactive shell-commands like nano will not work and can be blacklisted.
+- Define your own shortlinks for quick access for often used commands (maybe something like Telegram-HomeControl? Or ServerControl?)
+- Access your Linux or Windows Shell from everywhere without dynDNS or Portforwarding!
+
 # Requirements
 - Linux or Windows system
 - Smartphone with Telegram App (or Telegram Desktop)
