@@ -227,7 +227,7 @@ def openConfigFile(filepath='config.ini'): # Open ConfigFile
         pass
 
 if __name__ == '__main__':
-    configFile=openConfigFile('/etc/telegramShell/config.ini')
+    configFile=openConfigFile()
     if configFile:
         telegramShell(configFile)
     else:
