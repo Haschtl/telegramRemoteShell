@@ -45,7 +45,7 @@ Just enter name, info and the command in the 'COMMANDS:' section of 'config.ini'
 
 For more information, have a look at config_example.ini
 
-![Example](Asset.jpg)
+![Example](Example.jpg)
 
 # Autostart
 
