@@ -1,0 +1,46 @@
+{
+    "serverName": "RemoteShell",
+    "telegramToken": "ENTER YOUR BOTTOKEN HERE",
+    "commands": {
+        "info": {
+            "info": "Disk usage",
+            "execute": "sudo df -a | grep -m5 \"\""
+        },
+        "cloud_quota": {
+            "info": "Used space in cloud",
+            "execute": "sudo du -hs /dev/sda/ | grep -m1 \"\" && echo von ??TB belegt"
+        },
+        "cpu": {
+            "info": "CPU usage",
+            "execute": "mpstat"
+        },
+        "temp": {
+            "info": "System temperature",
+            "execute": "partialCMD \"sudo tlp-stat\" \"Temperatures\" \"+++\""
+        },
+        "SMART_system": {
+            "info": "HDD Status",
+            "execute": "sudo smartctl -H /dev/sda | grep SMART"
+        },
+        "start_apache": {
+            "info": "Start Webserver",
+            "execute": "sudo service apache2 start"
+        },
+        "stop_apache": {
+            "info": "Stop Webserver",
+            "execute": "sudo service apache2 stop"
+        },
+        "shutdown": {
+            "info": "Shutdown server",
+            "execute": "sudo shutdown -h now"
+        },
+        "reboot": {
+            "info": "Reboot server",
+            "execute": "sudo reboot"
+        },
+        "backup": {
+            "info": "Backup HDD - no data!",
+            "execute": "echo NOT CONFIGURED"
+        }
+    }
+}
